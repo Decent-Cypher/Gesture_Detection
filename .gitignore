@@ -1,2 +1,8 @@
 # Virtual environment for Python
 env/
+
+# NVIDIA dataset
+NVIDIA_Gesture_Dataset/
+
+# Files for reference
+other_files/
