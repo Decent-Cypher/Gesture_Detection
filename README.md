@@ -9,6 +9,15 @@ Hand gesture recognition has applications in various fields such as human-comput
 ## Features
 
 - Real-time hand detection and tracking using computer vision techniques.
-- Recognition of predefined hand gestures such as thumbs up, peace sign, and waving.
+- Recognition of predefined hand gestures such as thumbs up, peace sign, and some sign language letters.
 - Support for training custom hand gestures using machine learning algorithms.
 - Integration with graphical user interfaces (GUIs) for user interaction.
+
+## How to Use
+
+1. Install the required dependencies by running the following command in your terminal:
+`pip install -r requirements.txt`
+2. Once the requirements are installed, you can run the application by executing the following command:
+`python app.py`
+
+This will start the hand gesture recognition app, allowing you to interact with it using your camera. The list of the recognizable gestures can be found in the model folder.
