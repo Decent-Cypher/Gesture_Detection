@@ -8,20 +8,9 @@ import numpy as np
 import itertools
 import tensorflow as tf
 import sys
+import csv
+import argparse
 
-'''
-Current Data
-0: Open Palm
-1: Close Fist
-2: Pointing Up
-3: OK
-4: F*** ***
-5: Love Sign
-6: Peace Sign
-7: Finger Heart
-8: Thumb Up
-9: Thumb Down
-'''
 model = tf.keras.models.load_model('model/gesture_classifier.keras')
 hand_gesture_map = 'model/hand_gesture_label.csv'
 hand_gesture = {index:gesture for index, gesture in zip(np.loadtxt(hand_gesture_map, delimiter=',', dtype='int32', usecols=(0), encoding='utf-8-sig'), np.loadtxt(hand_gesture_map, delimiter=',', dtype='str', usecols=(1), encoding='utf-8-sig'))}
@@ -282,8 +271,20 @@ def inference(landmark_point):
     predict_result = model.predict(tf.expand_dims(np.array(landmark_point), 0))
     return np.argmax(predict_result, 1)[0]
 
+def log_new_instance(label: int, landmark_list):
+    csv_path = 'model/keypoint.csv'
+    with open(csv_path, 'a', newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow([label, *landmark_list])
+
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--add", type=int, default=-1)
+    return parser.parse_args()
+    
 
 def main():
+    args = get_args()
     cap = cv.VideoCapture(0)
     cap.set(cv.CAP_PROP_FRAME_WIDTH, 960)
     cap.set(cv.CAP_PROP_FRAME_HEIGHT, 480)
@@ -294,9 +295,13 @@ def main():
         min_tracking_confidence=0.5
     )
     while True:
+        lognew = False
         key = cv.waitKey(10)
         if key == 27:
             break
+        if key == ord('l'):
+            lognew = True
+
         ret, image = cap.read()
         if not ret:
             break
@@ -318,6 +323,9 @@ def main():
                 pre_processed_landmark_list = pre_process_landmark(
                     landmark_list)
                 
+                if lognew and args.add > -1:
+                    log_new_instance(args.add, pre_processed_landmark_list)
+
                 label = inference(pre_processed_landmark_list)
 
                 # Drawing part

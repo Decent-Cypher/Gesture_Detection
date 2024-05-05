@@ -21,3 +21,6 @@ Hand gesture recognition has applications in various fields such as human-comput
 `python app.py`
 
 This will start the hand gesture recognition app, allowing you to interact with it using your camera. The list of the recognizable gestures can be found in the model folder.
+
+If you want to add more data to the training set, add an argument to the command like this:
+`python app.py --add <label>` where label is a non negative integer. When the program is running, press l on the keyboard to save the landmarks as a new instance in the dataset.
